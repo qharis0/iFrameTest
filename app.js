@@ -33,7 +33,7 @@ async function loadVideos() {
 // Page elements
 const feed = document.getElementById('feed');
 const position = document.getElementById('position');
-const quitButton = document.getElementById('quit');
+const quitButton = document.getElementById('exit');
 const startOverlay = document.getElementById('startOverlay');
 const endOverlay = document.getElementById('endOverlay');
 
@@ -148,7 +148,7 @@ function buildFeed() {
 
 
 // Start a new viewing session.
-async function begin() {
+async function showfeed() {
   await loadVideos();
   if (!VIDEO_IDS.length) {
     return alert(
@@ -211,7 +211,7 @@ async function begin() {
 
 
 // End the viewing session.
-function finish() {
+function showexitpanel() {
   if (!startedAt || endedAt) {
     return;
   }
@@ -236,39 +236,6 @@ function finish() {
   endOverlay.classList.remove('hidden');
 }
 
-
-// Download the session data as JSON.
-function download() {
-  if (!endedAt) {
-    return;
-  }
-
-  const data = {
-    version: 'prototype-1',
-    startedAt: startedAt.iso,
-    endedAt: endedAt.iso,
-    sessionDurationMs: endedAt.elapsedMs,
-    videoIds: VIDEO_IDS,
-    events
-  };
-
-  const url = URL.createObjectURL(
-    new Blob(
-      [JSON.stringify(data, null, 2)],
-      { type: 'application/json' }
-    )
-  );
-
-  const a = document.createElement('a');
-  a.href = url;
-
-  a.download =
-    `session-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
-
-  a.click();
-
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 
 
 // Listen for messages from TikTok's embedded players.
@@ -338,19 +305,7 @@ if (
 
 // Connect the interface buttons.
 document.getElementById('start')
-  .addEventListener('click', begin);
+  .addEventListener('click', showfeed);
 
-document.getElementById('quit')
-  .addEventListener('click', finish);
-
-document.getElementById('download')
-  .addEventListener('click', download);
-
-document.getElementById('restart')
-  .addEventListener('click', () => {
-    endOverlay.classList.add('hidden');
-    startOverlay.classList.remove('hidden');
-
-    feed.replaceChildren();
-    position.textContent = 'Not started';
-  });
+document.getElementById('exit')
+  .addEventListener('click', showexitpanel);
