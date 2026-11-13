@@ -34,7 +34,8 @@ let ready = new Set();
 let lastSwitch = 0;
 let observer;
 
-// THIS FUNCTION PAUSES AND PLAYS VIDEOS, AND IS CALLED WHEN SCROLLING THE FEED
+// THIS FUNCTION PAUSES AND PLAYS VIDEOS
+//THIS IS CALLED WHEN SCROLLING THE FEED, WHEN VIDEOS LOAD, AND WHEN STARTING OR EXITING THE SESSION
 function send(index, type) {
 	const frame = document.querySelector(`iframe[data-index="${index}"]`);
 	if (frame?.contentWindow) {
@@ -43,23 +44,21 @@ function send(index, type) {
 }
 
 
-// Switch the currently active video.
+// THIS FUNCTION MAKES THE FEED REACT TO SCROLLING
 function showVideo(index) {
-	if (!sessionActive || (index === activeIndex && lastSwitch)) {
-	  return;
-	}
-  const previous = activeIndex;
+	// IGNORE SCROLLS IF SESSION HAS NOT STARTED OR HAS ALREADY ENDED
+	if (!sessionActive || (index === activeIndex && lastSwitch)) return;
 
-  if (lastSwitch) {
-    send(previous, 'pause');
-  }
+	// REMEMBERS POSITION OF CURRENT VIDEO AS THE PREVIOUS VIDEO
+	const previous = activeIndex;
+	if (lastSwitch) send(previous, 'pause');
 
-  activeIndex = index;
-  lastSwitch = performance.now();
-
-  if (ready.has(index)) {
-    send(index, 'play');
-  }
+	//UPDATE CURRENT POSITION TO PLACE OF NEW VIDEO
+	activeIndex = index;
+	lastSwitch = performance.now();
+	
+	// PLAY THE CURRENT VIDEO
+	if (ready.has(index)) send(index, 'play');
 }
 
 
