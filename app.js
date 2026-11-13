@@ -113,9 +113,7 @@ function buildFeed() {
     frame.allow = 'autoplay; fullscreen; encrypted-media';
     frame.referrerPolicy = 'no-referrer';
 
-    frame.src =
-      `https://www.tiktok.com/player/v1/${id}` +
-      `?autoplay=1&loop=1&rel=0&controls=1`;
+    frame.src = `https://www.tiktok.com/player/v1/${id}`;
 
     wrap.append(frame);
     slide.append(wrap);
