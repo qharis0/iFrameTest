@@ -3,7 +3,7 @@ let VIDEO_IDS = [];
 
 async function loadVideos() {
   try {
-    const response = await fetch('./video-IDs.JSON');
+    const response = await fetch('./video-IDs.json');
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
