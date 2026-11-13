@@ -1,7 +1,32 @@
-const VIDEO_IDS = [
-  '7692509104182545686',
-  '7675449431222783265'
-];
+let VIDEO_IDS = [];
+
+
+async function loadVideos() {
+  try {
+    const response = await fetch('./videos.json');
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data.videos)) {
+      throw new Error('videos.json must contain a videos array');
+    }
+
+    VIDEO_IDS = data.videos.filter(id =>
+      /^\d{15,25}$/.test(String(id))
+    ).map(String);
+
+    console.log(`Loaded ${VIDEO_IDS.length} videos`);
+
+  } catch (error) {
+    console.error('Failed to load videos:', error);
+    alert('Could not load videos.json. Check the Console.');
+  }
+}
+
 
 // Page elements
 const feed = document.getElementById('feed');
