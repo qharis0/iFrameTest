@@ -6,33 +6,23 @@
 //SCROLLS EMBEDS UP AND DOWN TO CREATE THAT FEED NAVIGATION
 //RESPONDS TO BUTTONS FOR STARTING AND ENDING THE SESSION
 
+
+
 let VIDEO_IDS = [];
 
-
 async function loadVideos() {
-  try {
-    const response = await fetch('./videos.json');
+	try {
+		const response = await fetch('./videos.json');
+		if (!response.ok) {
+			throw new Error(`HTTP ${response.status}`);
+		}
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+		const data = await response.json();
+		if (!Array.isArray(data.videos)) {
+			throw new Error('videos.json must contain a videos array');
+		}
 
-    const data = await response.json();
-
-    if (!Array.isArray(data.videos)) {
-      throw new Error('videos.json must contain a videos array');
-    }
-
-    VIDEO_IDS = data.videos.filter(id =>
-      /^\d{15,25}$/.test(String(id))
-    ).map(String);
-
-    console.log(`Loaded ${VIDEO_IDS.length} videos`);
-
-  } catch (error) {
-    console.error('Failed to load videos:', error);
-    alert('Could not load videos.json. Check the Console.');
-  }
+    VIDEO_IDS = data.videos;
 }
 
 
@@ -216,13 +206,6 @@ window.addEventListener('message', event => {
 	} else {
 		send(index, 'pause');
 	}
-
-	if (event.data.type === 'onPlayerError') {
-	console.error(
-		'TikTok player error:',
-		'Video index:', index,
-		'Error details:', event.data.value
-	);
 
 
   if (
