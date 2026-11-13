@@ -146,7 +146,8 @@ function buildFeed() {
 
 
 // Start a new viewing session.
-function begin() {
+async function begin() {
+  await loadVideos();
   if (!VIDEO_IDS.length) {
     return alert(
       'Add at least one TikTok video ID to app.js.'
