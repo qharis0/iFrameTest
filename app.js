@@ -7,7 +7,7 @@
 //RESPONDS TO BUTTONS FOR STARTING AND ENDING THE SESSION
 
 
-
+//CREATES AN EMPTY ARRY AND THEN POPULATES IT WITH VIDEO IDs LISTED IN VIDEOS.JSON FILE.
 let VIDEO_IDS = [];
 
 async function loadVideos() {
@@ -16,18 +16,13 @@ async function loadVideos() {
 		if (!response.ok) {
 			throw new Error(`HTTP ${response.status}`);
 		}
-
 		const data = await response.json();
-		if (!Array.isArray(data.videos)) {
-			throw new Error('videos.json must contain a videos array');
-		}
-
-    VIDEO_IDS = data.videos;
-}
+		VIDEO_IDS = data.videos;
+	}
 
 
 
-// Page elements
+// LISTENS TO INTERACTIVE ELEMENTS IN HTML DOC
 const feed = document.getElementById('feed');
 const quitButton = document.getElementById('exit');
 const startOverlay = document.getElementById('startOverlay');
@@ -39,21 +34,12 @@ let ready = new Set();
 let lastSwitch = 0;
 let observer;
 
-// Send a playback command to a TikTok embed.
+// THIS FUNCTION PAUSES AND PLAYS VIDEOS, AND IS CALLED WHEN SCROLLING THE FEED
 function send(index, type) {
-  const frame = document.querySelector(
-    `iframe[data-index="${index}"]`
-  );
-
-  if (frame?.contentWindow) {
-    frame.contentWindow.postMessage(
-      {
-        'x-tiktok-player': true,
-        type
-      },
-      'https://www.tiktok.com'
-    );
-  }
+	const frame = document.querySelector(`iframe[data-index="${index}"]`);
+	if (frame?.contentWindow) {
+		frame.contentWindow.postMessage({'x-tiktok-player': true, type}, 'https://www.tiktok.com');
+	}
 }
 
 
