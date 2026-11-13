@@ -191,13 +191,12 @@ window.addEventListener('message', event => {
   if (event.data.type === 'onPlayerReady') {
     ready.add(index);
 
-    // Playback commands disabled for debugging.
 	if (sessionActive && index === activeIndex) {
 		send(index, 'play');
 	} else {
 		send(index, 'pause');
 	}
-
+  }
 
   if (
     event.data.type === 'onStateChange' &&
@@ -209,7 +208,7 @@ window.addEventListener('message', event => {
 });
 
 
-// Connect the interface buttons.
+// START AND END SESSION WHEN BUTTONS ARE PRESSED
 document.getElementById('start')
   .addEventListener('click', showfeed);
 
