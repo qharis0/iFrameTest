@@ -230,9 +230,6 @@ function showexitpanel() {
   observer?.disconnect();
   quitButton.disabled = true;
 
-  document.getElementById('summary').textContent =
-    `Total session: ${(endedAt.elapsedMs / 1000).toFixed(1)} seconds.`;
-
   endOverlay.classList.remove('hidden');
 }
 
