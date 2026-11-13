@@ -275,15 +275,8 @@ window.addEventListener('message', event => {
 
     log('player_ready', { index });
 
-    if (
-      startedAt &&
-      !endedAt &&
-      index === activeIndex
-    ) {
-      send(index, 'play');
-    } else {
-      send(index, 'pause');
-    }
+    // Playback commands disabled for debugging.
+console.log('Player ready:', index);
   }
 
 	if (event.data.type === 'onPlayerError') {
