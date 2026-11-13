@@ -1,7 +1,3 @@
-
-// Replace these with numeric IDs from pre-screened TikTok URLs.
-// One official TikTok example ID is included for testing.
-
 const VIDEO_IDS = [
   '7692509104182545686',
   '7675449431222783265'
