@@ -1,5 +1,12 @@
-let VIDEO_IDS = [];
+//HARIS QURESHI
+//JAVASCRIPT HANDLES ALL THE INTERACTIVITY OF THE WEB APP
+//THE FEATURES INCLUDED IN THIS FILE ARE:
+//LOADING A LIST OF TIKTOK CONTENT IDs TO EMBED
+//EMBEDDING THE VIDEOS USING TIKTOK'S API
+//SCROLLS EMBEDS UP AND DOWN TO CREATE THAT FEED NAVIGATION
+//RESPONDS TO BUTTONS FOR STARTING AND ENDING THE SESSION
 
+let VIDEO_IDS = [];
 
 
 async function loadVideos() {
@@ -36,29 +43,11 @@ const quitButton = document.getElementById('exit');
 const startOverlay = document.getElementById('startOverlay');
 const endOverlay = document.getElementById('endOverlay');
 
-// Session state
-const events = [];
-
-let startedAt = null;
-let endedAt = null;
+let sessionActive = false;
 let activeIndex = 0;
 let ready = new Set();
 let lastSwitch = 0;
 let observer;
-
-
-// Record an event in the session log.
-function log(type, extra = {}) {
-  events.push({
-    type,
-    at: new Date().toISOString(),
-    elapsedMs: startedAt
-      ? Math.round(performance.now() - startedAt.mono)
-      : 0,
-    ...extra
-  });
-}
-
 
 // Send a playback command to a TikTok embed.
 function send(index, type) {
@@ -80,14 +69,9 @@ function send(index, type) {
 
 // Switch the currently active video.
 function showVideo(index) {
-  if (
-    !startedAt ||
-    endedAt ||
-    (index === activeIndex && lastSwitch)
-  ) {
-    return;
-  }
-
+	if (!sessionActive || (index === activeIndex && lastSwitch)) {
+	  return;
+	}
   const previous = activeIndex;
 
   if (lastSwitch) {
@@ -96,12 +80,6 @@ function showVideo(index) {
 
   activeIndex = index;
   lastSwitch = performance.now();
-
-  log('video_changed', {
-    from: previous,
-    to: index,
-    videoId: VIDEO_IDS[index]
-  });
 
   if (ready.has(index)) {
     send(index, 'play');
@@ -145,55 +123,45 @@ function buildFeed() {
 
 // Start a new viewing session.
 async function showfeed() {
-  await loadVideos();
-  if (!VIDEO_IDS.length) {
-    return alert(
-      'Add at least one TikTok video ID to app.js.'
-    );
-  }
+	await loadVideos();
+	if (!VIDEO_IDS.length) {
+		return alert(
+			'Add at least one TikTok video ID to app.js.'
+		);
+	}
+	
+	buildFeed();
 
-  buildFeed();
+	sessionActive = true;
+	activeIndex = 0;
+	lastSwitch = 0;
+	ready = new Set();
 
-  startedAt = {
-    iso: new Date().toISOString(),
-    mono: performance.now()
-  };
 
-  endedAt = null;
-  activeIndex = 0;
-  lastSwitch = 0;
-  ready = new Set();
+	startOverlay.classList.add('hidden');
+	endOverlay.classList.add('hidden');
 
-  events.length = 0;
+	quitButton.disabled = false;
 
-  log('session_started');
-
-  startOverlay.classList.add('hidden');
-  endOverlay.classList.add('hidden');
-
-  quitButton.disabled = false;
-
-  observer?.disconnect();
+	observer?.disconnect();
 
   // Detect which slide is visible.
-  observer = new IntersectionObserver(
-    entries => {
-      for (const entry of entries) {
-        if (
-          entry.isIntersecting &&
-          entry.intersectionRatio >= .65
-        ) {
-          showVideo(
-            Number(entry.target.dataset.index)
-          );
-        }
-      }
-    },
-    {
-      root: feed,
-      threshold: [.65]
-    }
-  );
+	observer = new IntersectionObserver(
+		entries => {
+			for (const entry of entries) {
+				if (
+					entry.isIntersecting &&
+					entry.intersectionRatio >= .65) {
+					showVideo(
+						Number(entry.target.dataset.index)
+					);
+				}
+			}
+		},
+		{root: feed,
+		 threshold: [.65]
+		}
+	);
 
   document.querySelectorAll('.slide').forEach(
     el => observer.observe(el)
@@ -205,34 +173,20 @@ async function showfeed() {
 
 // End the viewing session.
 function showexitpanel() {
-  if (!startedAt || endedAt) {
-    return;
-  }
-
-  send(activeIndex, 'pause');
-
-  endedAt = {
-    iso: new Date().toISOString(),
-    elapsedMs: Math.round(
-      performance.now() - startedAt.mono
-    )
-  };
-
-  log('session_ended');
-
-  observer?.disconnect();
-  quitButton.disabled = true;
-
-  endOverlay.classList.remove('hidden');
+	if (!sessionActive) {
+		return;
+	}
+	sessionActive = false;
+	send(activeIndex, 'pause');
+	observer?.disconnect();
+	quitButton.disabled = true;
+	endOverlay.classList.remove('hidden');
 }
 
 
 
 // Listen for messages from TikTok's embedded players.
 window.addEventListener('message', event => {
-	if (event.origin === 'https://www.tiktok.com') {
-		console.log('TikTok message received:', event.data);
-	}
   if (
     event.origin !== 'https://www.tiktok.com' ||
     !event.data ||
@@ -256,19 +210,12 @@ window.addEventListener('message', event => {
   if (event.data.type === 'onPlayerReady') {
     ready.add(index);
 
-    log('player_ready', { index });
-
     // Playback commands disabled for debugging.
-if (
-  startedAt &&
-  !endedAt &&
-  index === activeIndex
-) {
-  send(index, 'play');
-} else {
-  send(index, 'pause');
-}
-  }
+	if (sessionActive && index === activeIndex) {
+		send(index, 'play');
+	} else {
+		send(index, 'pause');
+	}
 
 	if (event.data.type === 'onPlayerError') {
 	console.error(
@@ -277,11 +224,6 @@ if (
 		'Error details:', event.data.value
 	);
 
-	log('player_error', {
-		index,
-		error: event.data.value
-	});
-	}
 
   if (
     event.data.type === 'onStateChange' &&
