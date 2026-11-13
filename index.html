@@ -1,12 +1,14 @@
-<!doctype html>
+<!DOCTYPE HTML>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Research Video Feed — Prototype!</title>
+  <title>Mock Video Feed</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="app.js" defer></script>
 </head>
+
 <body>
   <main id="feed" aria-label="Curated video feed"></main>
 
@@ -17,22 +19,15 @@
 
   <div class="overlay" id="startOverlay">
     <div class="panel">
-      <h1>Video feed prototype!</h1>
-      <p>
-        Browse a curated sequence of videos.
-        You can end the session at any time.
-      </p>
-      <p class="small">
-        This test uses TikTok embeds.
-        Video playback depends on TikTok and your browser.
-      </p>
-      <button id="start">Start session</button>
+      <h1>Mock Video Feed</h1>
+      <p>This version is just to get TikTok embeds to work. MAKE COPIES FOR INTERVENTIONS.</p>
+      <button id="start">Begin Session</button>
     </div>
   </div>
 
   <div class="overlay hidden" id="endOverlay">
     <div class="panel">
-      <h1>Session complete</h1>
+      <h1>Session ended</h1>
       <p id="summary"></p>
       <button id="download">Download session JSON</button>
       <button id="restart">Restart</button>
