@@ -1,37 +1,43 @@
 <!DOCTYPE HTML>
-<html lang="en">
+
+<!--HARIS QURESHI MSC -->
+<!--HTML FILES LAY CONTENT OUT ON A WEB PAGE-->
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mock Video Feed</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="app.js" defer></script>
+	<!--THIS SECTION INCLUDES THE TITLE OF THE TAB, AND LINKS THIS FILE
+	TO SEPERATE ONES FOR VISUAL GUIDELINES AND ONE FOR INTERACTIVITY-->
+	
+	<title>Mock Video Feed</title>
+	<link rel="stylesheet" href="styles.css" />
+	<script src="app.js" defer></script>
 </head>
 
+
 <body>
-  <main id="feed" aria-label="Curated video feed"></main>
+	<!--ID IS HOW IT AN OBJECT IS NAMES IN JAVASCRIPT, WHICH PROGRAMS IT-->
+	<!--CLASS IS ITS NAME IN CSS, WHICH CONTROLS THE LOOK AND PLACEMENT-->
+	
+	<main id="feed" aria-label="Mock Feed"></main>
+	
+	<button id="exit" class="exitbutton">Exit Session</button>
 
-  <div class="toolbar">
-    <span id="position">Not started</span>
-    <button id="quit" disabled>End session</button>
-  </div>
+	<!-- INFO PANEL SHOWN AT THE START-->
+	<!--INCLUDES OPAQUE BACKGROUND OVERLAY AND PANEL WITH TEXT AND BUTTON-->
+	<div class="overlay" id="startOverlay">
+		<div class="panel">
+			<h1>Mock Video Feed</h1>
+			<p>This version is just to get TikTok embeds to work. MAKE COPIES FOR INTERVENTIONS.</p>
+		<button id="start">Begin Session</button>
+		</div>
+	</div>
 
-  <div class="overlay" id="startOverlay">
-    <div class="panel">
-      <h1>Mock Video Feed</h1>
-      <p>This version is just to get TikTok embeds to work. MAKE COPIES FOR INTERVENTIONS.</p>
-      <button id="start">Begin Session</button>
-    </div>
-  </div>
-
-  <div class="overlay hidden" id="endOverlay">
-    <div class="panel">
-      <h1>Session ended</h1>
-      <p id="summary"></p>
-      <button id="download">Download session JSON</button>
-      <button id="restart">Restart</button>
-    </div>
-  </div>
+	<!--INFO PANEL SHOWN WHEN PARTICIPANTS QUIT-->
+	<!--BY DEFAULT THIS IS HIDDEN. THE EXIT BUTTON WILL CAUSE THIS TO APPEAR-->
+	<div class="overlay hidden" id="endOverlay">
+		<div class="panel">
+			<h1>Session ended</h1>
+		</div>
+	</div>
 </body>
+
 </html>
