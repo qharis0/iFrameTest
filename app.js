@@ -32,7 +32,6 @@ async function loadVideos() {
 
 // Page elements
 const feed = document.getElementById('feed');
-const position = document.getElementById('position');
 const quitButton = document.getElementById('exit');
 const startOverlay = document.getElementById('startOverlay');
 const endOverlay = document.getElementById('endOverlay');
@@ -97,9 +96,6 @@ function showVideo(index) {
 
   activeIndex = index;
   lastSwitch = performance.now();
-
-  position.textContent =
-    `Video ${index + 1} of ${VIDEO_IDS.length}`;
 
   log('video_changed', {
     from: previous,
@@ -171,9 +167,6 @@ async function showfeed() {
   events.length = 0;
 
   log('session_started');
-
-  position.textContent =
-    `Video 1 of ${VIDEO_IDS.length}`;
 
   startOverlay.classList.add('hidden');
   endOverlay.classList.add('hidden');
