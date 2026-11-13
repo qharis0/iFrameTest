@@ -111,7 +111,7 @@ function buildFeed() {
     frame.dataset.index = index;
     frame.title = `Curated TikTok video ${index + 1}`;
     frame.allow = 'autoplay; fullscreen; encrypted-media';
-    frame.referrerPolicy = 'no-referrer';
+
 
     frame.src = `https://www.tiktok.com/player/v1/${id}`;
 
