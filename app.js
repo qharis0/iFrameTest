@@ -206,6 +206,7 @@ window.addEventListener('message', event => {
 			setTimeout(() => {
 				if (sessionActive && index === activeIndex) {
 					send(index, 'unMute');
+				}
 				}, 500);
 		} else {
 			send(index, 'pause');
