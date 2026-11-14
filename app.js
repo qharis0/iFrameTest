@@ -66,7 +66,7 @@ function showVideo(index) {
 	// PLAY THE CURRENT VIDEO AND UNMUTE IT
 	if (ready.has(index)) {
 		send(index, 'play');
-		send(index, 'unMute');
+		//send(index, 'unMute');
 	}
 }
 
@@ -197,7 +197,7 @@ window.addEventListener('message', event => {
 
 	if (sessionActive && index === activeIndex) {
 		send(index, 'play');
-		//send(index, 'unMute');
+		send(index, 'unMute');
 
 	} else {
 		send(index, 'pause');
