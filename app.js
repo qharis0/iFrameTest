@@ -63,8 +63,11 @@ function showVideo(index) {
 	activeIndex = index;
 	lastSwitch = performance.now();
 	
-	// PLAY THE CURRENT VIDEO
-	if (ready.has(index)) send(index, 'play');
+	// PLAY THE CURRENT VIDEO AND UNMUTE IT
+	if (ready.has(index)) {
+		send(index, 'unMute');
+		send(index, 'play');
+	}
 }
 
 
