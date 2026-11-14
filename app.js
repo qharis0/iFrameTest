@@ -201,13 +201,16 @@ window.addEventListener('message', event => {
 	}
   }
 
-  if (event.data.type === 'onStateChange' && event.data.value === 1) {
-  if (sessionActive && index === activeIndex) {
-    send(index, 'unMute');
-  } else {
-    send(index, 'pause');
-  }
-}
+	if (event.data.type === 'onStateChange' && event.data.value === 1) {
+		if (sessionActive && index === activeIndex) {
+			setTimeout(() => {
+				if (sessionActive && index === activeIndex) {
+					send(index, 'unMute');
+				}, 500);
+		} else {
+			send(index, 'pause');
+		}
+	}
 });
 
 
