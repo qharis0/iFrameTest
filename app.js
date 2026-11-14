@@ -93,7 +93,7 @@ function buildFeed() {
 
     frame.src =
 	`https://www.tiktok.com/player/v1/${id}` +
-	`?autoplay=1&muted=1&loop=1&rel=0&controls=1`;
+	`?autoplay=1&muted=0&loop=1&rel=0&controls=1`;
 
     wrap.append(frame);
     slide.append(wrap);
