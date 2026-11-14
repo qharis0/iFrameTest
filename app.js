@@ -63,11 +63,8 @@ function showVideo(index) {
 	activeIndex = index;
 	lastSwitch = performance.now();
 	
-	// PLAY THE CURRENT VIDEO AND UNMUTE IT
-	if (ready.has(index)) {
-		send(index, 'play');
-		//send(index, 'unMute');
-	}
+	// PLAY THE CURRENT VIDEO
+	if (ready.has(index)) send(index, 'play');
 }
 
 
@@ -197,20 +194,20 @@ window.addEventListener('message', event => {
 
 	if (sessionActive && index === activeIndex) {
 		send(index, 'play');
-		send(index, 'unMute');
+		//send(index, 'unMute');
 
 	} else {
 		send(index, 'pause');
 	}
   }
 
-  if (
-    event.data.type === 'onStateChange' &&
-    event.data.value === 1 &&
-    index !== activeIndex
-  ) {
+  if (event.data.type === 'onStateChange' && event.data.value === 1) {
+  if (sessionActive && index === activeIndex) {
+    send(index, 'unMute');
+  } else {
     send(index, 'pause');
   }
+}
 });
 
 
