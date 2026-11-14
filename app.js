@@ -197,7 +197,7 @@ window.addEventListener('message', event => {
 
 	if (sessionActive && index === activeIndex) {
 		send(index, 'play');
-		send(index, 'unMute');
+		//send(index, 'unMute');
 
 	} else {
 		send(index, 'pause');
